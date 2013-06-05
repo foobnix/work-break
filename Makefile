@@ -6,7 +6,8 @@ OSRCS=core.o about.o fullscreen.o preferences.o trayicon.o
 CC=gcc
  
 # top-level rule to create the program.
-all: clean main run clean
+all: clean main run clean 
+	./work-break
  
 # compiling the source file.
 main: $(SRCS)

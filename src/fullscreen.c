@@ -81,6 +81,11 @@ void f_show_all() {
     gtk_widget_show_all(f_window);
 }
 
+void any_event(GtkWidget *widget, GdkEvent *event, gpointer user_data) {
+    printf("Event \n");
+    printf("%i", event->type);
+}
+
 void fullscreen_show_init() {
     f_window = gtk_window_new(GTK_WINDOW_POPUP);
     gtk_window_set_position(GTK_WINDOW(f_window), GTK_WIN_POS_CENTER);
@@ -106,6 +111,9 @@ void fullscreen_show_init() {
 
     gtk_window_set_default_size(GTK_WINDOW (f_window), w, h);
     gtk_window_fullscreen(GTK_WINDOW(f_window) );
+
+    GtkWidget *root_window = gdk_get_default_root_window();
+    g_signal_connect(GTK_STATUS_ICON (root_window), "f_window", GTK_SIGNAL_FUNC (any_event), NULL);
 
     GtkWidget *line1 = gtk_label_new("");
     GtkWidget *line2 = gtk_label_new("");

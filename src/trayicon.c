@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <gdk/gdk.h>
 #include "core.h"
 
 int cfg_working_left_time;
@@ -6,25 +7,30 @@ int cfg_working_left_time;
 GtkStatusIcon *trayIcon;
 
 static void tray_icon_popup(GtkStatusIcon *status_icon, guint button, guint32 activate_time, gpointer popUpMenu) {
+    printf("poup \n");
     gtk_menu_popup(GTK_MENU(popUpMenu), NULL, NULL, gtk_status_icon_position_menu, status_icon, button, activate_time);
 }
 
-void tray_icon_update(){
+void tray_icon_update() {
     gchar *res = g_strdup_printf("%i minutes left before rest", cfg_working_left_time);
     gtk_status_icon_set_tooltip(trayIcon, res);
+}
+
+void on_mouse_move() {
+    printf("on mouse move \n");
 }
 
 void tray_icon_show_init() {
 
     //trayIcon = gtk_status_icon_new_from_icon_name(GTK_STOCK_EXECUTE);
-	trayIcon = gtk_status_icon_new_from_file("src/gnome-foot.png");
+    trayIcon = gtk_status_icon_new_from_file("src/gnome-foot.png");
 
     GtkWidget *menu = gtk_menu_new();
 
-    GtkWidget *pref= gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES,NULL);
-    GtkWidget *line= gtk_separator_menu_item_new();
+    GtkWidget *pref = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL );
+    GtkWidget *line = gtk_separator_menu_item_new();
 
-    GtkWidget *about = gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT,NULL);
+    GtkWidget *about = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, NULL );
     GtkWidget *take_break = gtk_menu_item_new_with_label("Take A Break");
 
     g_signal_connect(G_OBJECT (pref), "activate", G_CALLBACK (core_preferences_show), NULL);
@@ -40,7 +46,6 @@ void tray_icon_show_init() {
 
     //g_signal_connect(GTK_STATUS_ICON (trayIcon), "activate", GTK_SIGNAL_FUNC (tray_icon_click), NULL);
     g_signal_connect(GTK_STATUS_ICON (trayIcon), "popup-menu", GTK_SIGNAL_FUNC (tray_icon_popup), menu);
-
 
     gtk_widget_show_all(trayIcon);
 
