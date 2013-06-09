@@ -10,18 +10,11 @@
 #include <stdio.h>
 #include <time.h>
 
-#ifdef __unix__
-# include <unistd.h>
-#elif defined _WIN32
-# include <windows.h>
-#define sleep(x) Sleep(1000 * x)
-#endif
-
-int cfg_working_time = 55;
-int cfg_rest_time = 5;
+int cfg_working_time_sec = 55 * 60;
+int cfg_rest_time_sec = 4 * 60;
 int cfg_working_left_time = 0;
 
-int current_state = STATE_RESTING;
+volatile int current_state = STATE_STOP;
 
 int finish_time_sec = 0;
 
@@ -35,108 +28,71 @@ int main(int argc, char *argv[]) {
 
     gtk_init(&argc, &argv);
 
-    //gtk_timeout_add(1000, thread_timer_one, NULL);
+    gtk_timeout_add(1000, thread_timer, NULL );
 
     fullscreen_show_init();
 
     core_tray_icon_show();
 
-    core_start_working();
+    c_start_work();
 
-    //core_preferences_show();
-
-    pthread_t thraed1;
-    pthread_create(&thraed1, NULL, thread_timer, NULL );
     gtk_main();
     gdk_threads_leave();
 }
 
-void *thread_timer_one() {
-    printf("go \n");
-}
-
 void *thread_timer() {
+    printf("Timer STATE  %i  \n", current_state);
+    if (current_state == STATE_STOP) {
+        printf("Timer stopped \n");
+    }
 
-    for (;;) {
-        printf("timer %i \n", current_state);
-        if (current_state == STATE_WORKING || current_state == STATE_RESTING) {
-            printf("enable \n");
-            time_t current_time = time(NULL );
-            if (finish_time_sec == 0) {
-                finish_time_sec = current_time + cfg_working_time * 60;
-            }
-            time_t delta = finish_time_sec - current_time;
+    time_t current_time = time(NULL );
+    time_t delta = finish_time_sec - current_time;
 
-            //time_t now = (time_t)100;
-            struct tm *format = localtime(&delta);
+    struct tm *format = localtime(&delta);
 
-            printf("Current local time and date: %s", asctime(format));
-            int res = format->tm_min;
+    printf("Current local time and date: %s", asctime(format));
+    int res = format->tm_min;
 
-            printf("%02i:%02i \n", format->tm_min, format->tm_sec);
+    printf("%02i:%02i \n", format->tm_min, format->tm_sec);
 
-            char timer_str[100];
+    char timer_str[100];
 
-            snprintf(timer_str, 100, "%02i:%02i", format->tm_min, format->tm_sec);
+    snprintf(timer_str, 100, "%02i:%02i", format->tm_min, format->tm_sec);
 
-            cfg_working_left_time = format->tm_min;
-            tray_icon_update();
+    cfg_working_left_time = format->tm_min;
 
-            gdk_threads_enter();
-            update_timer_str(timer_str);
-                gdk_threads_leave();
+    tray_icon_update();
+    update_timer_str(timer_str);
+    f_set_time_label(timer_str);
 
-            printf("delta %i \n", delta);
-            if (delta <= 0) {
-                if (current_state == STATE_WORKING) {
-                    finish_time_sec = current_time + cfg_rest_time * 60;
-                    current_state = STATE_RESTING;
-                    gdk_threads_enter();
-                    f_update_bg();
-                    f_show_all();
-                    gdk_threads_leave();
-                    printf("show FULL screen \n");
-                } else if (current_state == STATE_RESTING) {
-                    printf("hide FULL screen \n");
-                    current_state = STATE_WORKING;
-                    finish_time_sec = current_time + cfg_rest_time * 60;
-                    gdk_threads_enter();
-                    f_hide();
-                    gdk_threads_leave();
+    printf("delta %i \n", delta);
 
-                }
-            }
-            if (current_state == STATE_RESTING) {
-                f_set_time_label(timer_str);
-            }
-
+    if (delta <= 0) {
+        if (current_state == STATE_WORKING) {
+            c_take_brake();
+        } else if (current_state == STATE_RESTING) {
+            c_start_work();
         }
-
-        sleep(1);
     }
-}
-void core_init() {
-    core_start_working();
-}
-
-void core_start_working() {
-    printf("core_start_working %i \n",current_state);
-    if (current_state != STATE_WORKING ) {
-        current_state = STATE_WORKING;
-        printf("start working \n");
-        time_t current_time = time(NULL );
-        finish_time_sec = current_time + cfg_working_time * 60;
-    } else {
-        current_state = STATE_DISABLE;
-        update_timer_str("00:00");
-    }
-    update_button_name();
 
 }
 
-void core_take_a_break() {
+void c_start_work() {
+    current_state = STATE_WORKING;
+    time_t current_time = time(NULL );
+    finish_time_sec = current_time + cfg_working_time_sec;
+
+    f_hide();
+
+}
+
+void c_take_brake() {
     current_state = STATE_RESTING;
-    core_start_working();
+    time_t current_time = time(NULL );
+    finish_time_sec = current_time + cfg_rest_time_sec;
+
+    f_update_bg();
     f_show_all();
 }
 
@@ -150,10 +106,3 @@ void core_tray_icon_show() {
 void core_preferences_show() {
     preferences_show_init();
 }
-
-void core_fullscrean_show() {
-    gdk_threads_enter();
-    fullscreen_show_init();
-    gdk_threads_leave();
-}
-

@@ -22,8 +22,13 @@ void on_mouse_move() {
 
 void tray_icon_show_init() {
 
-    //trayIcon = gtk_status_icon_new_from_icon_name(GTK_STOCK_EXECUTE);
-    trayIcon = gtk_status_icon_new_from_file("src/gnome-foot.png");
+    char fname[] = "src/gnome-foot.png";
+
+    if( access( fname, F_OK ) != -1 ) {
+        trayIcon = gtk_status_icon_new_from_file(fname);
+    } else {
+        trayIcon = gtk_status_icon_new_from_icon_name(GTK_STOCK_EXECUTE);
+    }
 
     GtkWidget *menu = gtk_menu_new();
 
@@ -35,7 +40,7 @@ void tray_icon_show_init() {
 
     g_signal_connect(G_OBJECT (pref), "activate", G_CALLBACK (core_preferences_show), NULL);
     g_signal_connect(G_OBJECT (about), "activate", G_CALLBACK (gtk_main_quit), NULL);
-    g_signal_connect(G_OBJECT (take_break), "activate", G_CALLBACK (core_take_a_break), NULL);
+    g_signal_connect(G_OBJECT (take_break), "activate", G_CALLBACK (c_take_brake), NULL);
 
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), pref);
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), about);

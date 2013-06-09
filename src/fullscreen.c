@@ -72,9 +72,6 @@ static void colorinvert_picture(GdkPixbuf *pb) {
 void f_hide() {
     //gtk_window_unfullscreen(GTK_WINDOW(f_window) );
     gtk_widget_hide(f_window);
-
-    current_state = STATE_DISABLE;
-    core_start_working();
 }
 void f_show_all() {
     //gtk_window_fullscreen(GTK_WINDOW(f_window) );
@@ -110,7 +107,7 @@ void fullscreen_show_init() {
     //int h = 100;
 
     gtk_window_set_default_size(GTK_WINDOW (f_window), w, h);
-    gtk_window_fullscreen(GTK_WINDOW(f_window) );
+    //gtk_window_fullscreen(GTK_WINDOW(f_window) );
 
     GtkWidget *root_window = gdk_get_default_root_window();
     g_signal_connect(GTK_STATUS_ICON (root_window), "f_window", GTK_SIGNAL_FUNC (any_event), NULL);
@@ -142,7 +139,7 @@ void fullscreen_show_init() {
     gtk_box_pack_start(GTK_BOX(box), line1, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box), text, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), time_label, FALSE, FALSE, 0);
-    //gtk_box_pack_start(GTK_BOX(box), exit, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), exit, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), line2, TRUE, TRUE, 0);
 
     gtk_container_add(GTK_CONTAINER (f_window), box);
