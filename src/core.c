@@ -11,7 +11,7 @@
 #include <time.h>
 
 int cfg_working_time_sec = 55 * 60;
-int cfg_rest_time_sec = 4 * 60;
+int cfg_rest_time_sec = 5 * 60;
 int cfg_working_left_time = 0;
 
 volatile int current_state = STATE_STOP;
@@ -39,6 +39,8 @@ int main(int argc, char *argv[]) {
     gtk_main();
     gdk_threads_leave();
 }
+
+
 
 void *thread_timer() {
     printf("Timer STATE  %i  \n", current_state);
@@ -76,6 +78,12 @@ void *thread_timer() {
         }
     }
 
+}
+void c_on_any_event(){
+    printf("any event \n");
+    if(current_state == STATE_RESTING){
+        c_start_work();
+    }
 }
 
 void c_start_work() {

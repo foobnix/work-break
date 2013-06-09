@@ -7,6 +7,11 @@
 GtkWidget * time_label;
 GtkWidget *f_window;
 
+void * event(GtkWidget *widget, GdkEvent *event){
+    //c_on_any_event();
+    printf("event type %i \n", event->type);
+}
+
 //static gboolean key_press(GtkWidget *win, GdkEventKey *ev, gpointer data) {
 //    if (ev->keyval == GDK_Escape) {
 //        //gtk_widget_destroy(win);
@@ -110,7 +115,7 @@ void fullscreen_show_init() {
     //gtk_window_fullscreen(GTK_WINDOW(f_window) );
 
     GtkWidget *root_window = gdk_get_default_root_window();
-    g_signal_connect(GTK_STATUS_ICON (root_window), "f_window", GTK_SIGNAL_FUNC (any_event), NULL);
+    //g_signal_connect(GTK_STATUS_ICON (root_window), "f_window", GTK_SIGNAL_FUNC (any_event), NULL);
 
     GtkWidget *line1 = gtk_label_new("");
     GtkWidget *line2 = gtk_label_new("");
@@ -139,12 +144,20 @@ void fullscreen_show_init() {
     gtk_box_pack_start(GTK_BOX(box), line1, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box), text, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(box), time_label, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box), exit, FALSE, FALSE, 0);
+
+    //gtk_box_pack_start(GTK_BOX(box), exit, FALSE, FALSE, 0);
+
     gtk_box_pack_start(GTK_BOX(box), line2, TRUE, TRUE, 0);
 
     gtk_container_add(GTK_CONTAINER (f_window), box);
 
     //gtk_widget_show_all(window);
+
+    //gtk_signal_connect_object(GTK_OBJECT (f_window), "event", GTK_SIGNAL_FUNC (event), G_OBJECT(f_window));
+
+    double x, y;
+
+
 }
 
 void f_update_bg() {
@@ -158,6 +171,19 @@ void f_update_bg() {
     gtk_widget_set_style(GTK_WIDGET(f_window), GTK_STYLE (style) );
 
 }
+
+void f_update_bg_clean() {
+    GdkPixbuf *image = get_screenshot();
+    GdkPixmap *background = NULL;
+    gdk_pixbuf_render_pixmap_and_mask(image, &background, NULL, 0);
+
+    GtkStyle *style = gtk_style_new();
+    style->bg_pixmap[0] = background;
+    gtk_widget_set_style(GTK_WIDGET(f_window), GTK_STYLE (style) );
+
+}
+
+
 
 void f_set_time_label(char *str) {
     gchar *res = g_strdup_printf("<span  font_desc='32.5' weight='bold' foreground='black'>%s</span>", str);

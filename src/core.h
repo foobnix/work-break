@@ -25,4 +25,7 @@ void core_about_show();
 void c_start_work();
 void c_take_brake();
 
+void c_on_any_event();
+
+
 #endif /* CORE_H_ */
