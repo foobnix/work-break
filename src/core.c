@@ -14,7 +14,7 @@
 int cfg_working_time_sec = 55 * 60;
 int cfg_rest_time_sec = 5 * 60;
 int cfg_working_left_time = 0;
-int is_debug = 0;
+int is_debug;
 
 volatile int current_state = STATE_STOP;
 
@@ -41,6 +41,9 @@ void get_settings() {
     } else {
         g_key_file_set_integer(settings, "MAIN", "cfg_rest_time_sec", cfg_rest_time_sec);
     }
+
+    is_debug =  g_key_file_get_integer(settings, "MAIN", "is_debug", NULL );
+    printf("is_debug %i  \n", is_debug);
 
     gchar *data = g_key_file_to_data(settings, NULL, NULL );
     FILE *file = fopen("config.ini", "w");
