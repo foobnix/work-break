@@ -24,6 +24,7 @@ void update_timer_str(char *str) {
 void update_time() {
 	cfg_working_time_sec = gtk_spin_button_get_value(spin_work) * 60;
 	cfg_rest_time_sec = gtk_spin_button_get_value(spin_rest) * 60;
+	c_save_settings();
 }
 
 void in_start() {
