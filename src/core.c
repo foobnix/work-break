@@ -14,7 +14,7 @@
 int cfg_working_time_sec = 55 * 60;
 int cfg_rest_time_sec = 5 * 60;
 int cfg_working_left_time = 0;
-int is_debug = 1;
+int is_debug = 0;
 
 volatile int current_state = STATE_STOP;
 
