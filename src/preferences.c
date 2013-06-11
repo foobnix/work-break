@@ -35,8 +35,14 @@ void in_break() {
 	update_time();
 	c_take_brake();
 }
-void pref_hide(){
+gboolean pref_hide(){
+    printf("my destroy \n");
 	gtk_widget_hide_all(window);
+	return FALSE;
+}
+void pref_show_all(){
+    printf("my show \n");
+    gtk_widget_show_all(window);
 }
 
 void preferences_show_init() {
@@ -46,7 +52,7 @@ void preferences_show_init() {
 	gtk_window_set_title(GTK_WINDOW(window), "Type Braking");
 	gtk_widget_set_size_request(window, -1, -1);
 	gtk_window_set_resizable(window, FALSE);
-	g_signal_connect(window, "destroy", G_CALLBACK(gtk_widget_hide_all),
+	g_signal_connect(window, "destroy", G_CALLBACK(pref_hide),
 			window);
 
 	GtkWidget *layout = gtk_vbox_new(FALSE, 0);
@@ -106,6 +112,6 @@ void preferences_show_init() {
 
 	gtk_container_add(GTK_CONTAINER(window), layout);
 
-	gtk_widget_show_all(window);
+	//gtk_widget_show_all(window);
 
 }

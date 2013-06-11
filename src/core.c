@@ -83,7 +83,8 @@ int main(int argc, char *argv[]) {
 
     c_start_work();
 
-    core_preferences_show();
+    preferences_show_init();
+    pref_show_all();
 
     gtk_main();
     gdk_threads_leave();
@@ -160,5 +161,7 @@ void core_tray_icon_show() {
     tray_icon_show_init();
 }
 void core_preferences_show() {
+    pref_hide();
     preferences_show_init();
+    pref_show_all();
 }
