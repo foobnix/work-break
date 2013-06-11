@@ -9,16 +9,61 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <time.h>
+#include <glib.h>
 
 int cfg_working_time_sec = 55 * 60;
 int cfg_rest_time_sec = 5 * 60;
 int cfg_working_left_time = 0;
+int is_debug = 1;
 
 volatile int current_state = STATE_STOP;
 
 int finish_time_sec = 0;
 
 void *thread_timer();
+
+void get_settings() {
+    GKeyFile *settings = g_key_file_new();
+    g_key_file_load_from_file(settings, "config.ini", G_KEY_FILE_KEEP_COMMENTS, NULL );
+
+    int time = g_key_file_get_integer(settings, "MAIN", "cfg_working_time_sec", NULL );
+    printf("cfg_working_time_sec %i  \n", time);
+    if (time != 0) {
+        cfg_working_time_sec = time;
+    } else {
+        g_key_file_set_integer(settings, "MAIN", "cfg_working_time_sec", cfg_working_time_sec);
+    }
+
+    time = g_key_file_get_integer(settings, "MAIN", "cfg_rest_time_sec", NULL );
+    printf("cfg_rest_time_sec %i  \n", time);
+    if (time != 0) {
+        cfg_rest_time_sec = time;
+    } else {
+        g_key_file_set_integer(settings, "MAIN", "cfg_rest_time_sec", cfg_rest_time_sec);
+    }
+
+    gchar *data = g_key_file_to_data(settings, NULL, NULL );
+    FILE *file = fopen("config.ini", "w");
+    fputs(data, file);
+    fclose(file);
+    g_free(data);
+
+}
+void c_save_settings() {
+    GKeyFile *settings = g_key_file_new();
+    g_key_file_load_from_file(settings, "config.ini", G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+    g_key_file_set_integer(settings, "MAIN", "cfg_working_time_sec", cfg_working_time_sec);
+    g_key_file_set_integer(settings, "MAIN", "cfg_rest_time_sec", cfg_rest_time_sec);
+
+    gchar *data = g_key_file_to_data(settings, NULL, NULL );
+    FILE *file = fopen("config.ini", "w");
+    fputs(data, file);
+    fclose(file);
+    g_free(data);
+
+    printf("save settins %i  \n", time);
+}
 
 int main(int argc, char *argv[]) {
 
@@ -28,6 +73,8 @@ int main(int argc, char *argv[]) {
 
     gtk_init(&argc, &argv);
 
+    get_settings();
+
     gtk_timeout_add(1000, thread_timer, NULL );
 
     fullscreen_show_init();
@@ -36,11 +83,11 @@ int main(int argc, char *argv[]) {
 
     c_start_work();
 
+    core_preferences_show();
+
     gtk_main();
     gdk_threads_leave();
 }
-
-
 
 void *thread_timer() {
     printf("Timer STATE  %i  \n", current_state);
@@ -79,9 +126,9 @@ void *thread_timer() {
     }
 
 }
-void c_on_any_event(){
+void c_on_any_event() {
     printf("any event \n");
-    if(current_state == STATE_RESTING){
+    if (current_state == STATE_RESTING) {
         c_start_work();
     }
 }
@@ -100,6 +147,7 @@ void c_take_brake() {
     time_t current_time = time(NULL );
     finish_time_sec = current_time + cfg_rest_time_sec;
 
+    pref_hide();
     f_update_bg();
     f_show_all();
 }

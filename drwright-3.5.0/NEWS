@@ -1,0 +1,94 @@
+Typing Break 3.5.0
+==================
+
+- Build fixes
+- Use GResource
+- Translation updates
+
+Typing Break 3.2.5
+==================
+
+- Install gnome-typing-monitor in libexec dir (#672553)
+- Translation updates
+
+Typing Break 3.2.4
+==================
+
+- Add Keywords to the .desktop file
+
+Typing Break 3.2.3
+==================
+
+- Add Lock button to break screen (#128381)
+- Translation updates
+
+Typing Break 3.2.2
+==================
+
+* Build fix (#662180)
+
+Typing Break 3.2.1
+==================
+
+* Translation updates
+
+Typing Break 3.2.0
+==================
+
+* Work with GNOME Control Centre 3.2.x
+* Translation updates
+
+Typing Break 3.0.2
+==================
+
+* Translation updates
+
+Typing Break 3.0.1
+==================
+
+* Translation updates
+
+Typing Break 3.0.0
+==================
+
+* Translation updates
+
+Typing Break 2.91.91
+====================
+
+* Use notifications instead of status icon (#643535, Christopher Aillon)
+* Use the 'Personal' category for the control centre panel (#643143, Christopher Aillon)
+* Update control centre panel text (#644051, Christopher Aillon)
+* Translation updates
+
+Typing Break 2.91.90
+====================
+
+* Translation updates
+* Fix a critical warning in the control centre panel (#642340)
+* Some gcc 4.6 warning fixes (#642339, Christopher Aillon)
+* Fix g-s-d plugin schema (#642416, Christopher Aillon)
+* Don't focus the Postpone button in the break window by default (#642525)
+* Account for idle time when starting a typing break (#642788, Christopher Aillon)
+
+Typing Break 2.91.1
+===================
+
+* Translation updates
+* Build with latest gtk3
+* Bug fixes: #621640, #638218, #627194
+
+Typing Break 2.91.0
+===================
+
+The Typing Break code has been removed from gnome-settings-daemon
+and gnome-control-centre and is being ressurrected here as a
+stand-alone module.
+
+It consists of:
+* the typing monitor itself
+* a Gnome settings daemon plugin, to activate the typing monitor when enabled
+* a Gnome control centre panel, to configure the typing monitor options
+
+An attempt has been made to reuse the existing translations from g-s-d and g-c-c.
+

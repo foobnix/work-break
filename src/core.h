@@ -12,10 +12,13 @@
 #define STATE_WORKING 1
 #define STATE_RESTING 2
 
+#define DRW_SETTINGS_SCHEMA_ID "org.gnome.settings-daemon.plugins.work-break"
+
 extern int cfg_working_time_sec;
 extern int cfg_rest_time_sec;
 extern int cfg_working_left_time;
 extern volatile int current_state;
+extern int is_debug;
 
 void core_tray_icon_show();
 void core_preferences_show();
@@ -26,6 +29,7 @@ void c_start_work();
 void c_take_brake();
 
 void c_on_any_event();
+void c_save_settings();
 
 
 #endif /* CORE_H_ */

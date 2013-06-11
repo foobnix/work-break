@@ -1,0 +1,7 @@
+[org.gnome.settings-daemon.plugins.TypingBreak]
+active = /apps/gnome_settings_daemon/plugins/typing-break/active
+enabled =  /desktop/gnome/typing_break/enabled
+allow-postpone = /desktop/gnome/typing_break/allow_postpone
+type-time = /desktop/gnome/typing_break/type_time
+break-time = /desktop/gnome/typing_break/break_time
+unlock-phrase = /desktop/gnome/typing_break/unlock_phrase

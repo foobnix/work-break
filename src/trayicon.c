@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "core.h"
+#include <unistd.h>
 
 int cfg_working_left_time;
 
@@ -19,10 +20,13 @@ void tray_icon_update() {
 void on_mouse_move() {
     printf("on mouse move \n");
 }
-
+void try_quit(){
+    c_save_settings();
+    gtk_main_quit();
+}
 void tray_icon_show_init() {
 
-    char fname[] = "src/gnome-foot.png";
+    char fname[] = "systray.png";
 
     if( access( fname, F_OK ) != -1 ) {
         trayIcon = gtk_status_icon_new_from_file(fname);
@@ -39,7 +43,7 @@ void tray_icon_show_init() {
     GtkWidget *take_break = gtk_menu_item_new_with_label("Take A Break");
 
     g_signal_connect(G_OBJECT (pref), "activate", G_CALLBACK (core_preferences_show), NULL);
-    g_signal_connect(G_OBJECT (about), "activate", G_CALLBACK (gtk_main_quit), NULL);
+    g_signal_connect(G_OBJECT (about), "activate", G_CALLBACK (try_quit), NULL);
     g_signal_connect(G_OBJECT (take_break), "activate", G_CALLBACK (c_take_brake), NULL);
 
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), pref);
@@ -49,7 +53,7 @@ void tray_icon_show_init() {
 
     gtk_widget_show_all(menu);
 
-    //g_signal_connect(GTK_STATUS_ICON (trayIcon), "activate", GTK_SIGNAL_FUNC (tray_icon_click), NULL);
+    g_signal_connect(GTK_STATUS_ICON (trayIcon), "activate", GTK_SIGNAL_FUNC (core_preferences_show), NULL);
     g_signal_connect(GTK_STATUS_ICON (trayIcon), "popup-menu", GTK_SIGNAL_FUNC (tray_icon_popup), menu);
 
     gtk_widget_show_all(trayIcon);

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright © 2010 Christian Persch
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation; either version 3, or (at your option)
+  any later version.
+
+  This program is distributed in the hope conf it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+-->
+<schemalist>
+  <schema id="org.gnome.settings-daemon.plugins.typing-break"
+          path="/org/gnome/settings-daemon/plugins/typing-break/"
+          gettext-domain="drwright">
+    <key name="active" type="b">
+      <default>true</default>
+      <_summary>Whether the settings daemon should activate the typing break plugin</_summary>
+    </key>
+    <key type="i" name="priority">
+      <default>100</default>
+      <_summary>Priority to use for this plugin</_summary>
+    </key>
+    <key name="enabled" type="b">
+      <default>true</default>
+      <_summary>Whether typing break is enabled</_summary>
+    </key>
+    <key name="allow-postpone" type="b">
+      <default>false</default>
+      <_summary>Whether the typing break can be postponed</_summary>
+    </key>
+    <key name="type-time" type="i">
+      <range min="300" max="7200" />
+      <default>3600</default>
+      <_summary>Number of seconds of typing time before break mode starts</_summary>
+    </key>
+    <key name="break-time" type="i">
+      <range min="30" max="3600" />
+      <default>180</default>
+      <_summary>Number of seconds that the typing break should last</_summary>
+    </key>
+    <key name="unlock-phrase" type="s">
+      <default>''</default>
+      <_summary>Phrase to unlock the break screen with</_summary>
+    </key>
+  </schema>
+</schemalist>

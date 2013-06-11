@@ -1,0 +1,15 @@
+[Desktop Entry]
+_Name=Typing Break
+_Comment=Change typing break settings
+Exec=gnome-control-center typing-break
+Icon=typing-monitor
+Terminal=false
+Type=Application
+StartupNotify=true
+# The X-GNOME-Settings-Panel is necessary to show in the main shell UI
+Categories=GNOME;GTK;Settings;DesktopSettings;X-GNOME-Settings-Panel;X-GNOME-PersonalSettings;
+OnlyShowIn=GNOME;
+X-GNOME-Settings-Panel=typing-break
+# Translators: those are keywords for the example control-center panel
+_Keywords=Typing;Break;RSI;Workrave;
+_X-GNOME-Keywords=Typing;Break;RSI;Workrave;
