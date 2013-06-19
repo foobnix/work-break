@@ -44,6 +44,9 @@ void pref_show_all(){
     printf("my show \n");
     gtk_widget_show_all(window);
 }
+void in_2h_work(){
+    c_start_long_work();
+}
 
 void preferences_show_init() {
 
@@ -96,19 +99,29 @@ void preferences_show_init() {
 	timer = gtk_label_new("00:00");
 
 	run_state = gtk_button_new_with_label("Start Work");
-	GtkWidget *stop = gtk_button_new_with_label("Take a Break");
+
+
+	GtkWidget *long_work = gtk_button_new_with_label("Working for 2h");
+
+	GtkWidget *layout_work = gtk_hbox_new(FALSE, 0);
+	gtk_box_pack_start(layout_work, run_state, TRUE, TRUE, 0);
+	gtk_box_pack_start(layout_work, long_work, TRUE, TRUE, 0);
+
+
+	GtkWidget *take_break = gtk_button_new_with_label("Take a Break");
 
 	gtk_button_set_label(GTK_BUTTON(run_state), "Start Working");
 
 	gtk_box_pack_start(layout, timer, FALSE, TRUE, 0);
-	gtk_box_pack_start(layout, run_state, FALSE, TRUE, 0);
-	gtk_box_pack_start(layout, stop, FALSE, TRUE, 0);
+	gtk_box_pack_start(layout, layout_work, TRUE, TRUE, 0);
+	gtk_box_pack_start(layout, take_break, FALSE, TRUE, 0);
 
 	int time = (int) gtk_spin_button_get_value(spin_work);
 	int rest_time = (int) gtk_spin_button_get_value(spin_rest);
 
 	g_signal_connect(run_state, "clicked", G_CALLBACK(in_start), NULL);
-	g_signal_connect(stop, "clicked", G_CALLBACK(in_break), NULL);
+	g_signal_connect(take_break, "clicked", G_CALLBACK(in_break), NULL);
+	g_signal_connect(long_work, "clicked", G_CALLBACK(in_2h_work), NULL);
 
 	gtk_container_add(GTK_CONTAINER(window), layout);
 

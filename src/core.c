@@ -42,7 +42,7 @@ void get_settings() {
         g_key_file_set_integer(settings, "MAIN", "cfg_rest_time_sec", cfg_rest_time_sec);
     }
 
-    is_debug =  g_key_file_get_integer(settings, "MAIN", "is_debug", NULL );
+    is_debug = g_key_file_get_integer(settings, "MAIN", "is_debug", NULL );
     printf("is_debug %i  \n", is_debug);
 
     gchar *data = g_key_file_to_data(settings, NULL, NULL );
@@ -54,7 +54,7 @@ void get_settings() {
 }
 void c_save_settings() {
     GKeyFile *settings = g_key_file_new();
-    g_key_file_load_from_file(settings, "config.ini", G_KEY_FILE_KEEP_COMMENTS, NULL);
+    g_key_file_load_from_file(settings, "config.ini", G_KEY_FILE_KEEP_COMMENTS, NULL );
 
     g_key_file_set_integer(settings, "MAIN", "cfg_working_time_sec", cfg_working_time_sec);
     g_key_file_set_integer(settings, "MAIN", "cfg_rest_time_sec", cfg_rest_time_sec);
@@ -102,20 +102,25 @@ void *thread_timer() {
     time_t current_time = time(NULL );
     time_t delta = finish_time_sec - current_time;
 
-    struct tm *format = localtime(&delta);
+    //struct tm *format = localtime(&delta);
+    struct tm *format = gmtime(&delta);
 
     printf("Current local time and date: %s", asctime(format));
     int res = format->tm_min;
 
-    printf("%02i:%02i \n", format->tm_min, format->tm_sec);
+    printf("%i %02i:%02i \n", format->tm_hour, format->tm_min, format->tm_sec);
 
     char timer_str[100];
 
-    snprintf(timer_str, 100, "%02i:%02i", format->tm_min, format->tm_sec);
+    if (format->tm_hour > 0) {
+        snprintf(timer_str, 100, "%i:%02i:%02i",format->tm_hour, format->tm_min, format->tm_sec);
+    } else {
+        snprintf(timer_str, 100, "%02i:%02i", format->tm_min, format->tm_sec);
+    }
 
     cfg_working_left_time = format->tm_min;
 
-    tray_icon_update();
+    tray_icon_update(delta);
     update_timer_str(timer_str);
     f_set_time_label(timer_str);
 
@@ -141,9 +146,16 @@ void c_start_work() {
     current_state = STATE_WORKING;
     time_t current_time = time(NULL );
     finish_time_sec = current_time + cfg_working_time_sec;
-
     f_hide();
+    tray_show();
+}
 
+void c_start_long_work() {
+    current_state = STATE_WORKING;
+    time_t current_time = time(NULL );
+    finish_time_sec = current_time + 2 * 60 * 60;
+    f_hide();
+    tray_show();
 }
 
 void c_take_brake() {
@@ -154,6 +166,8 @@ void c_take_brake() {
     pref_hide();
     f_update_bg();
     f_show_all();
+    tray_hide();
+
 }
 
 void core_about_show() {
@@ -162,6 +176,9 @@ void core_about_show() {
 
 void core_tray_icon_show() {
     tray_icon_show_init();
+}
+void core_preferences_hide() {
+    pref_hide();
 }
 void core_preferences_show() {
     pref_hide();

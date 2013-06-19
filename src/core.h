@@ -12,8 +12,6 @@
 #define STATE_WORKING 1
 #define STATE_RESTING 2
 
-#define DRW_SETTINGS_SCHEMA_ID "org.gnome.settings-daemon.plugins.work-break"
-
 extern int cfg_working_time_sec;
 extern int cfg_rest_time_sec;
 extern int cfg_working_left_time;
@@ -25,6 +23,7 @@ void core_preferences_show();
 void core_fullscrean_show();
 void core_about_show();
 
+void c_start_long_work();
 void c_start_work();
 void c_take_brake();
 
