@@ -11,6 +11,7 @@
 #define STATE_STOP 0
 #define STATE_WORKING 1
 #define STATE_RESTING 2
+#define STATE_WAITING 3
 
 extern int cfg_working_time_sec;
 extern int cfg_rest_time_sec;

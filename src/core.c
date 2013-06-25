@@ -15,6 +15,7 @@ int cfg_working_time_sec = 55 * 60;
 int cfg_rest_time_sec = 5 * 60;
 int cfg_working_left_time = 0;
 int is_debug;
+int is_mouse_event = 0;
 
 volatile int current_state = STATE_STOP;
 
@@ -113,7 +114,7 @@ void *thread_timer() {
     char timer_str[100];
 
     if (format->tm_hour > 0) {
-        snprintf(timer_str, 100, "%i:%02i:%02i",format->tm_hour, format->tm_min, format->tm_sec);
+        snprintf(timer_str, 100, "%i:%02i:%02i", format->tm_hour, format->tm_min, format->tm_sec);
     } else {
         snprintf(timer_str, 100, "%02i:%02i", format->tm_min, format->tm_sec);
     }
@@ -125,12 +126,24 @@ void *thread_timer() {
     f_set_time_label(timer_str);
 
     printf("delta %i \n", delta);
+    printf("is_mouse_event %i \n", is_mouse_event);
+
+    int temp = is_mouse_event;
 
     if (delta <= 0) {
         if (current_state == STATE_WORKING) {
             c_take_brake();
         } else if (current_state == STATE_RESTING) {
-            c_start_work();
+            current_state = STATE_WAITING;
+            is_mouse_event = 0;
+            finish_time_sec = current_time+1;
+        }else if (current_state == STATE_WAITING) {
+            finish_time_sec = current_time+1;
+            printf("is_mouse_event %i \n", is_mouse_event);
+            if(temp==1){
+                printf("REady for work \n");
+                c_start_work();
+           }
         }
     }
 
@@ -146,6 +159,7 @@ void c_start_work() {
     current_state = STATE_WORKING;
     time_t current_time = time(NULL );
     finish_time_sec = current_time + cfg_working_time_sec;
+    //finish_time_sec = current_time + 10;
     f_hide();
     tray_show();
 }
@@ -162,6 +176,7 @@ void c_take_brake() {
     current_state = STATE_RESTING;
     time_t current_time = time(NULL );
     finish_time_sec = current_time + cfg_rest_time_sec;
+    //finish_time_sec = current_time + 3;
 
     pref_hide();
     f_update_bg();
