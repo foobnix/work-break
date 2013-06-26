@@ -27,6 +27,7 @@ void core_about_show();
 void c_start_long_work();
 void c_start_work();
 void c_take_brake();
+void c_postpone();
 
 void c_on_any_event();
 void c_save_settings();

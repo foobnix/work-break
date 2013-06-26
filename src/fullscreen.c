@@ -144,13 +144,13 @@ void fullscreen_show_init() {
     GtkWidget *e2 = gtk_label_new("");
 
     GtkWidget *exit = gtk_button_new();
-    gtk_button_set_label(GTK_BUTTON(exit), "Start Work");
+    gtk_button_set_label(GTK_BUTTON(exit), "Postpone");
 
     gtk_box_pack_start(GTK_BOX(exitBox), e1, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(exitBox), exit, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(exitBox), e2, FALSE, FALSE, 0);
 
-    g_signal_connect(exit, "clicked", G_CALLBACK(c_start_work), NULL);
+    g_signal_connect(exit, "clicked", G_CALLBACK(c_postpone), NULL);
 
     GtkWidget * box = gtk_vbox_new(FALSE, 0);
 

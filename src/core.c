@@ -163,6 +163,13 @@ void c_start_work() {
     f_hide();
     tray_show();
 }
+void c_postpone() {
+    current_state = STATE_WORKING;
+    time_t current_time = time(NULL );
+    finish_time_sec = current_time + 5*60;
+    f_hide();
+    tray_show();
+}
 
 void c_start_long_work() {
     current_state = STATE_WORKING;
