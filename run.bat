@@ -10,7 +10,8 @@ set PKG_CONFIG_PATH=%GDIR%\lib\pkgconfig\
 set PATH=%PATH%;%GDIR%\bin\
 
 del %APP_NAME%
-gcc %P%\core.c %P%\about.c %P%\fullscreen.c %P%\preferences.c %P%\trayicon.c -I%P% %VAR% -mwindows -o %APP_NAME% icon.res
+:: gcc -g -O0 %P%\core.c %P%\about.c %P%\fullscreen.c %P%\preferences.c %P%\trayicon.c -I%P% %VAR% -mwindows -o %APP_NAME% icon.res
+gcc -g -O0 %P%\core.c %P%\about.c %P%\fullscreen.c %P%\preferences.c %P%\trayicon.c -I%P% %VAR% -o %APP_NAME% icon.res
 :: gcc %P%\core.c %P%\about.c %P%\fullscreen.c %P%\preferences.c %P%\trayicon.c -I%P% %VAR% -o %APP_NAME% icon.res
 :: gcc %P%\test.c -I%P% %VAR% -mnowindows -o  timer.exe
 :: gcc C:\Users\iviv\workspace-new\testc\src\teste.c %VAR% -lgtk-win32-2.0

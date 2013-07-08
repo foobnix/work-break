@@ -12,4 +12,5 @@ void f_set_time_label(char *str);
 void f_show_fullscreen();
 void f_hide_fullscreen();
 
+
 #endif /* FULLSCREEN_H_ */

@@ -52,18 +52,21 @@ void tray_icon_show_init() {
     GtkWidget *menu = gtk_menu_new();
 
     GtkWidget *pref = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL );
-    GtkWidget *line = gtk_separator_menu_item_new();
 
     GtkWidget *about = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, NULL );
     GtkWidget *take_break = gtk_menu_item_new_with_label("Take A Break");
+    GtkWidget *start_work = gtk_menu_item_new_with_label("Start Work");
 
     g_signal_connect(G_OBJECT(pref), "activate", G_CALLBACK(core_preferences_show), NULL );
     g_signal_connect(G_OBJECT(about), "activate", G_CALLBACK(try_quit), NULL );
     g_signal_connect(G_OBJECT(take_break), "activate", G_CALLBACK(c_take_brake), NULL );
+    g_signal_connect(G_OBJECT(start_work), "activate", G_CALLBACK(c_start_work), NULL );
 
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), pref);
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), about);
-    gtk_menu_shell_append(GTK_MENU_SHELL (menu), line);
+    gtk_menu_shell_append(GTK_MENU_SHELL (menu), gtk_separator_menu_item_new());
+    gtk_menu_shell_append(GTK_MENU_SHELL (menu), start_work);
+    gtk_menu_shell_append(GTK_MENU_SHELL (menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), take_break);
 
     gtk_widget_show_all(menu);

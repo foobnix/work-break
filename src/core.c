@@ -21,7 +21,7 @@ volatile int current_state = STATE_STOP;
 
 int finish_time_sec = 0;
 
-void *thread_timer();
+int *thread_timer();
 
 void get_settings() {
     GKeyFile *settings = g_key_file_new();
@@ -44,6 +44,7 @@ void get_settings() {
     }
 
     is_debug = g_key_file_get_integer(settings, "MAIN", "is_debug", NULL );
+
     printf("is_debug %i  \n", is_debug);
 
     gchar *data = g_key_file_to_data(settings, NULL, NULL );
@@ -67,6 +68,12 @@ void c_save_settings() {
     g_free(data);
 
     printf("save settins %i  \n", time);
+}
+
+static gboolean rmotion() {
+    printf("root motion \n");
+    is_mouse_event = 1;
+    return FALSE;
 }
 
 int main(int argc, char *argv[]) {
@@ -94,22 +101,29 @@ int main(int argc, char *argv[]) {
     gdk_threads_leave();
 }
 
-void *thread_timer() {
+int *thread_timer() {
     printf("Timer STATE  %i  \n", current_state);
     if (current_state == STATE_STOP) {
         printf("Timer stopped \n");
     }
 
     time_t current_time = time(NULL );
+    printf("current_time is %i \n", current_time);
+
     time_t delta = finish_time_sec - current_time;
 
     //struct tm *format = localtime(&delta);
     struct tm *format = gmtime(&delta);
-
-    printf("Current local time and date: %s", asctime(format));
+    if (format == 0) {
+        printf("time format 0\n");
+        int *res = 12;
+        return res;
+    }
+    printf("format %i \n", format);
+    //printf("Current local time and date: %s", asctime(format));
     int res = format->tm_min;
 
-    printf("%i %02i:%02i \n", format->tm_hour, format->tm_min, format->tm_sec);
+    printf("time %i %02i:%02i \n", format->tm_hour, format->tm_min, format->tm_sec);
 
     char timer_str[100];
 
@@ -136,14 +150,14 @@ void *thread_timer() {
         } else if (current_state == STATE_RESTING) {
             current_state = STATE_WAITING;
             is_mouse_event = 0;
-            finish_time_sec = current_time+1;
-        }else if (current_state == STATE_WAITING) {
-            finish_time_sec = current_time+1;
+            finish_time_sec = current_time + 1;
+        } else if (current_state == STATE_WAITING) {
+            finish_time_sec = current_time + 1;
             printf("is_mouse_event %i \n", is_mouse_event);
-            if(temp==1){
+            if (temp == 1) {
                 printf("REady for work \n");
                 c_start_work();
-           }
+            }
         }
     }
 
@@ -166,7 +180,7 @@ void c_start_work() {
 void c_postpone() {
     current_state = STATE_WORKING;
     time_t current_time = time(NULL );
-    finish_time_sec = current_time + 5*60;
+    finish_time_sec = current_time + 5 * 60;
     f_hide();
     tray_show();
 }
