@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
     c_start_work();
 
     preferences_show_init();
-    pref_show_all();
+    //pref_show_all();
 
     gtk_main();
     gdk_threads_leave();
@@ -220,4 +220,8 @@ void core_preferences_show() {
     pref_hide();
     preferences_show_init();
     pref_show_all();
+}
+
+void core_preferences_show_hide(){
+    show_hide();
 }

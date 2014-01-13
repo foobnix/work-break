@@ -37,17 +37,20 @@ void try_quit() {
 }
 //int i = 2;
 void in_click() {
-    core_preferences_show();
+    core_preferences_show_hide();
 }
 void tray_icon_show_init() {
 
     char fname[] = "systray.png";
 
-    if (access(fname, F_OK) != -1) {
-        trayIcon = gtk_status_icon_new_from_file(fname);
+	
+	if (access(fname, F_OK) != -1) {
+		//trayIcon = gtk_status_icon_new_from_file(fname);        	
     } else {
-        trayIcon = gtk_status_icon_new_from_icon_name(GTK_STOCK_EXECUTE);
+    	
     }
+	trayIcon = gtk_status_icon_new_from_icon_name(GTK_STOCK_EXECUTE);  	
+	
 
     GtkWidget *menu = gtk_menu_new();
 
@@ -62,12 +65,12 @@ void tray_icon_show_init() {
     g_signal_connect(G_OBJECT(take_break), "activate", G_CALLBACK(c_take_brake), NULL );
     g_signal_connect(G_OBJECT(start_work), "activate", G_CALLBACK(c_start_work), NULL );
 
-    gtk_menu_shell_append(GTK_MENU_SHELL (menu), pref);
-    gtk_menu_shell_append(GTK_MENU_SHELL (menu), about);
-    gtk_menu_shell_append(GTK_MENU_SHELL (menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), start_work);
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), gtk_separator_menu_item_new());
     gtk_menu_shell_append(GTK_MENU_SHELL (menu), take_break);
+    gtk_menu_shell_append(GTK_MENU_SHELL (menu), gtk_separator_menu_item_new());
+    gtk_menu_shell_append(GTK_MENU_SHELL (menu), pref);
+    gtk_menu_shell_append(GTK_MENU_SHELL (menu), about);
 
     gtk_widget_show_all(menu);
 

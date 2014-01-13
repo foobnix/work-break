@@ -21,6 +21,8 @@ extern int is_debug;
 
 void core_tray_icon_show();
 void core_preferences_show();
+void core_preferences_show_hide();
+
 void core_fullscrean_show();
 void core_about_show();
 

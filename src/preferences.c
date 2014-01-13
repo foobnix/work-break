@@ -16,6 +16,7 @@ GtkWidget *window;
 
 int cfg_working_time_sec;
 int cfg_rest_time_sec;
+int is_visible = 0;
 
 void update_timer_str(char *str) {
 	gtk_label_set_text(GTK_LABEL(timer), str);
@@ -38,12 +39,23 @@ void in_break() {
 gboolean pref_hide(){
     printf("my destroy \n");
 	gtk_widget_hide_all(window);
+	is_visible = 0;
 	return FALSE;
 }
 void pref_show_all(){
     printf("my show \n");
     gtk_widget_show_all(window);
+    is_visible = 1;
 }
+void show_hide(){
+    if(is_visible==0){
+        preferences_show_init();
+        pref_show_all();
+    }else{
+        pref_hide();
+    }
+}
+
 void in_2h_work(){
     c_start_long_work();
 }
@@ -51,7 +63,7 @@ void in_2h_work(){
 void preferences_show_init() {
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_position(window, GTK_WIN_POS_CENTER);
+	gtk_window_set_position(window, GTK_WIN_POS_MOUSE);
 	gtk_window_set_title(GTK_WINDOW(window), "Type Braking");
 	gtk_widget_set_size_request(window, -1, -1);
 	gtk_window_set_resizable(window, FALSE);
@@ -81,7 +93,7 @@ void preferences_show_init() {
 	GtkWidget *text2 = gtk_label_new("Break interval");
 	gtk_widget_set_size_request(text2, 100, -1);
 
-	spin_rest = gtk_spin_button_new_with_range(1, 15, 1);
+	spin_rest = gtk_spin_button_new_with_range(5, 15, 1);
 
 	if (cfg_rest_time_sec > 60) {
 		gtk_spin_button_set_value(spin_rest, cfg_rest_time_sec / 60);
