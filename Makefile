@@ -1,8 +1,8 @@
 NAME=work-break
 CFLAGS=-O0 -g3 -Wall -c -fmessage-length=0 -pthread
 GTKFLAGS=`pkg-config --cflags --libs gtk+-2.0 gthread-2.0`
-SRCS=src/core.c src/about.c src/fullscreen.c src/preferences.c src/trayicon.c
-OSRCS=core.o about.o fullscreen.o preferences.o trayicon.o
+SRCS=src/core.c src/about.c src/fullscreen.c src/preferences.c src/trayicon.c src/mouse_xy.c
+OSRCS=core.o about.o fullscreen.o preferences.o trayicon.o mouse_xy.o
 CC=gcc
 
 #mac os x
