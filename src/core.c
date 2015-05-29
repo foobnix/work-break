@@ -132,7 +132,7 @@ int *thread_timer() {
 	oldMouse = mouseXY;
 	printf("Absent Timer %i \n", absentTimer);
 
-	if(absentTimer > 10){
+	if(absentTimer > cfg_rest_time_sec){
 		c_start_work();
 	}
 
