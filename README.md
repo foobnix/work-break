@@ -17,6 +17,9 @@ Similar app like typing break in gnome 2. Eyes keeper. For Linux and Windows. C 
      wget https://github.com/foobnix/work-break/raw/master/work-break
      chmod +x work-break
     ./work-break
+    
+# Autostart
+sh -c "sleep 10 && /path/to/work-break"
       
 Add application to autostart on login
 
