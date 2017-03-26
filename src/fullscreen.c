@@ -33,7 +33,7 @@ static gboolean key_press(GtkWidget *win, GdkEventKey *ev, gpointer data) {
     return FALSE;
 }
 static gboolean motion() {
-    printf("motion_notify_event \n");
+    //printf("motion_notify_event \n");
     is_mouse_event = 1;
     return FALSE;
 }

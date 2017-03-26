@@ -5,6 +5,7 @@
 
 int cfg_working_left_time;
 
+
 GtkStatusIcon *trayIcon;
 
 static void tray_icon_popup(GtkStatusIcon *status_icon, guint button, guint32 activate_time, gpointer popUpMenu) {
@@ -13,11 +14,12 @@ static void tray_icon_popup(GtkStatusIcon *status_icon, guint button, guint32 ac
 }
 
 void tray_show() {
-    gtk_status_icon_set_visible(trayIcon, TRUE);
+        //gtk_status_icon_set_visible(trayIcon, TRUE);
+    
 }
 void tray_hide() {
-    gtk_status_icon_set_visible(trayIcon, FALSE);
-}
+        //gtk_status_icon_set_visible(trayIcon, FALSE);
+    }
 
 void tray_icon_update(int seconds) {
     if (seconds < 60) {

@@ -18,6 +18,7 @@ extern int cfg_rest_time_sec;
 extern int cfg_working_left_time;
 extern volatile int current_state;
 extern int is_debug;
+extern int is_with_tray;
 
 void core_tray_icon_show();
 void core_preferences_show();

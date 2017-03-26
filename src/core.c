@@ -16,6 +16,7 @@ int cfg_working_time_sec = 55 * 60;
 int cfg_rest_time_sec = 5 * 60;
 int cfg_working_left_time = 0;
 int is_debug;
+int is_with_tray = 0;
 int is_mouse_event = 0;
 
 volatile int current_state = STATE_STOP;
@@ -51,8 +52,9 @@ void get_settings() {
 	}
 
 	is_debug = g_key_file_get_integer(settings, "MAIN", "is_debug", NULL);
-
+    is_with_tray = g_key_file_get_integer(settings, "MAIN", "is_with_tray", NULL);
 	printf("is_debug %i  \n", is_debug);
+	printf("is_with_tray %i  \n", is_with_tray);
 
 	gchar *data = g_key_file_to_data(settings, NULL, NULL);
 	FILE *file = fopen("config.ini", "w");
@@ -141,6 +143,7 @@ int *thread_timer() {
 	printf("current_time is %i \n", current_time);
 
 	time_t delta = finish_time_sec - current_time;
+	printf("delta %i \n", delta);
 
 	//struct tm *format = localtime(&delta);
 	struct tm *format = gmtime(&delta);
@@ -150,6 +153,7 @@ int *thread_timer() {
 		return res;
 	}
 	printf("format %i \n", format);
+	printf("format %i \n", format->tm_min);
 	//printf("Current local time and date: %s", asctime(format));
 	int res = format->tm_min;
 
@@ -211,9 +215,11 @@ void c_start_work() {
 	tray_show();
 }
 void c_postpone() {
+	printf("c_postpone \n");
 	current_state = STATE_WORKING;
 	time_t current_time = time(NULL);
 	finish_time_sec = current_time + 5 * 60;
+	printf("finish_time_sec %i \n",finish_time_sec);
 	f_hide();
 	tray_show();
 }
@@ -227,15 +233,19 @@ void c_start_long_work() {
 }
 
 void c_take_brake() {
+	printf("c_take_brake \n");
 	current_state = STATE_RESTING;
 	time_t current_time = time(NULL);
 	finish_time_sec = current_time + cfg_rest_time_sec;
 	//finish_time_sec = current_time + 3;
+	
+	printf("finish_time_sec %i \n", finish_time_sec);
+		
 
 	pref_hide();
 	f_update_bg();
 	f_show_all();
-	tray_hide();
+	//tray_hide();
 
 }
 
